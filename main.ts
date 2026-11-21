@@ -35,4 +35,8 @@ const back = readFileSync(outPath, "utf-8");
 if (back !== POEM) {
   throw new Error("read-back mismatch: entry.txt does not equal the poem");
 }
+// Also guard against silent newline translation: byte length must match exactly.
+if (Buffer.byteLength(back, "utf-8") !== Buffer.byteLength(POEM, "utf-8")) {
+  throw new Error("byte-length mismatch: entry.txt was altered on write");
+}
 console.log(`wrote ${outPath} (${codePoints} code points)`);
